@@ -1,1 +1,6 @@
+# Things to ignore  #
 /venv
+
+*.pyc
+
+
