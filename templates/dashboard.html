@@ -9,22 +9,22 @@
         <iframe src="https://embed.spotify.com/?uri={{ playlists.0.uri }}" width="300" height="380" frameborder="0" allowtransparency="true"></iframe>
         </div>
 
-        <div class="pre-scrollable" style="margin-right: 70px; align: center; width: 300px; height: 380px; display: inline-block; background-color: #181818; padding: 0; overflow: scroll" >
-			<ul>
+        <div style="margin-right: 70px; align: center; width: 300px; height: 380px; display: inline-block; background-color: #181818; padding: 0; overflow-y: scroll" >
+			<ul style="height: 380px; padding: 0;">
 			{% for playlist in playlists %}
-				<li id = "{{ forloop.counter }}">
-					<p style="color: white"> {{ playlist.name }} </p>
-					<img src="{{ playlist.images.0.url }} " height="100" width="100"> </img>	
+				<li style="padding: 5px; border-bottom: 1px solid #282828;" id = "{{ forloop.counter }}">
+					<img src="{{ playlist.images.0.url }} " height="78" width="78"> </img>	
+					<span style="color: white; padding-left: 5px;"> {{ playlist.name }} </span>
 				</li>
 				{% endfor %}
 			
 			</ul>
        </div>
 
-        <div class="pre-scrollable" style="align: center; width: 300px; height: 380px; display: inline-block; background-color: #181818; overflow: scroll">
-			<ul>
+        <div style="align: center; width: 300px; height: 380px; display: inline-block; background-color: #181818; overflow-y: scroll">
+			<ul style="height: 380px; padding: 0;">
 				{% for event in events %}
-				<li id = "{{ forloop.counter }}">
+				<li style="border-bottom: 1px solid #282828; padding: 5px;" id = "{{ forloop.counter }}">
 					<p style="color: white"> {{ event.summary }} </p>
 					<p style="color: #a0a0a0"> {{ event.start.dateTime }} </p>
 					<p style="color: #a0a0a0"> {{ event.end.dateTime }} </p>
