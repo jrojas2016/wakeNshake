@@ -2,13 +2,13 @@
 
 {% block content %}
 
-{% if client["client_id"] == 'user' %}
+{% if client_id == 'user' %}
     <p>Create an account</p>
     <a href="{% url 'user' %}" class="btn btn-default">User login</a>
-{% elif client["client_id"] == 'calendar' %}
+{% elif client_id == 'calendar' %}
     <p>Google calendar</p>
     <a href="{% url 'oauth2callback_calendar' %}" class="btn btn-default">Google calendar login</a>
-{% elif client["client_id"] == 'spotify' %}
+{% elif client_id == 'spotify' %}
     <p>Spotify</p>
     <a href="{% url 'oauth2callback_spotify' %}" class="btn btn-default">Spotify login</a>
 {% else %}

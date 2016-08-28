@@ -6,6 +6,7 @@ import hashlib
 import json
 from models import UserForm
 from django.contrib.auth.models import User
+from models import customUser
 from django.contrib.auth import authenticate
 
 # Util Functions
@@ -17,10 +18,10 @@ def sha512_hash(credentials):
 @csrf_protect
 def oauth2callback_calendar(request):
 	current_user = request.user
-	calendarSecrets = json.loads( open(CALENDAR_SECRET) )
+	calendarSecrets = json.load( open(CALENDAR_SECRETS) )
 	try:
 		flow = oauthClient.flow_from_clientsecrets(
-			CALENDAR_SECRET,
+			CALENDAR_SECRETS,
 			scope = calendarSecrets['web']['scope'],
 			redirect_uri = calendarSecrets['web']['redirect_uris']
 		)
@@ -28,12 +29,12 @@ def oauth2callback_calendar(request):
 	except:
 		msg = 'There is an error with your calendar API tokens! Please review the credentials.'
 		print msg	#DEBUG
-
-	if 'code' not in request.body:
+	print request.GET 
+	if request.GET.get('code', '') is not '':
 		authUri = flow.step1_get_authorize_url()
 		return redirect(authUri)
 	else:
-		customUser.object.create(user= current_user, )
+		customUser.objects.create(user= current_user )
 		authCode = request.body['code']
 		credentials = flow.step2_exchange(authCode)
 		customUser.object.create(user= current_user, calendar_cred = credentials)
@@ -45,7 +46,7 @@ def oauth2callback_calendar(request):
 @csrf_protect
 def oauth2callback_spotify(request, user):
 	current_user = request.user
-	spotifySecrets = json.loads( open(CALENDAR_SECRET) )
+	spotifySecrets = json.loads( open(SPOTIFY_SECRETS) )
 	try:
 		flow = oauthClient.OAuth2WebServerFlow(
 			client_id = spotifySecrets['web']['client_id'],
@@ -82,9 +83,20 @@ def adduser(request):
 		# redirect, or however you want to get to the main view
 		user = new_user
 		user.save()
-		return render(request, 'login.html' )
+		print "User is valid"
+		client = {}
+		print user.password
+		auth_user = authenticate(username= user.username, password = user.password)
+		print auth_user
+		if auth_user is not None:
+			login(request, user)
+			return render(request, 'calendar_login.html', {'user': user} )
+		else:
+			pass
 	else:
 		form = UserForm() 
+		print "User is not valid"
+
 
 	return render(request, 'adduser.html', {'form': form}) 
 
