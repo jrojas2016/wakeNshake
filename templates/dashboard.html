@@ -1,17 +1,15 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <h1>DASHBOARD</h1>
+    <h1 style="color: white">DASHBOARD</h1>
 	
-	<div class="pre-scrollable">
-
-      <div class="container" style="padding-right: 2%">
+      <div class="container" style="padding: 0">
 
         <div class="col-md-4">
         <iframe src="https://embed.spotify.com/?uri={{ playlists.0.uri }}" width="300" height="380" frameborder="0" allowtransparency="true"></iframe>
         </div>
 
-        <div class="col-md-4" style="background-color: #181818; padding-left: 2%; padding-right: 2%; overflow: scroll" >
+        <div class="pre-scrollable" style="margin-right: 70px; align: center; width: 300px; height: 380px; display: inline-block; background-color: #181818; padding: 0; overflow: scroll" >
 			<ul>
 			{% for playlist in playlists %}
 				<li id = "{{ forloop.counter }}">
@@ -23,20 +21,18 @@
 			</ul>
        </div>
 
-        <div class="col-md-4" style="background-color: #181818; overflow: scroll">
+        <div class="pre-scrollable" style="align: center; width: 300px; height: 380px; display: inline-block; background-color: #181818; overflow: scroll">
 			<ul>
 				{% for event in events %}
 				<li id = "{{ forloop.counter }}">
 					<p style="color: white"> {{ event.summary }} </p>
-					<p style="color: white"> {{ event.start.dateTime }} </p>
-					<p style="color: white"> {{ event.end.dateTime }} </p>
+					<p style="color: #a0a0a0"> {{ event.start.dateTime }} </p>
+					<p style="color: #a0a0a0"> {{ event.end.dateTime }} </p>
 				</li>
 				{% endfor %}
 			
 			</ul>
         </div>
-      </div>
-
 
     </div>
 
