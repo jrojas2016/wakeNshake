@@ -40,8 +40,9 @@ def oauth2callback_calendar(request):
 	else:
 		# customUser.objects.create(user= current_user )
 		authCode = request.GET.get('code', '')
-		print authCode
+		# print authCode 	# DEBUG
 		credentials = flow.step2_exchange(authCode)
+
 		savedCred = json.load( open(os.getcwd() + '/oauth/ClientSecrets/clientCred.json') )
 		savedCred['calendar_cred'] = credentials.to_json()
 		json.dump(savedCred, open(os.getcwd() + '/oauth/ClientSecrets/clientCred.json', 'w') )
@@ -73,7 +74,6 @@ def oauth2callback_spotify(request):
 		# cust = customUser.objects.get(user= current_user)
 		authCode = request.GET.get('code', '')
 		credentials = flow.get_access_token(authCode)
-		print credentials
 		savedCred = json.load( open(os.getcwd() + '/oauth/ClientSecrets/clientCred.json') )
 		savedCred['spotify_cred'] = json.dumps(credentials)
 		json.dump(savedCred, open(os.getcwd() + '/oauth/ClientSecrets/clientCred.json', 'w') )

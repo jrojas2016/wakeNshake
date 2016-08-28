@@ -14,11 +14,9 @@ def get_cred(clientName):
 		print type(clientCred) 	# DEBUG
 		return clientCred['access_token']
 	else:
-		clientCredsFile = open(os.getcwd() + '/oauth/ClientSecrets/clientCred.json', 'r')
-		clientCreds = clientCredsFile.readline()
-		endIndex = clientCreds.find('"user_agent": null}')
-		clientCred = clientCreds[18:(endIndex + 19)]	# DEBUG
-		print clientCred
+		clientCreds = json.load( open(os.getcwd() + '/oauth/ClientSecrets/clientCred.json', 'r') )
+		clientCred = str( clientCreds[clientName] )
+		print type(clientCred) 	# DEBUG
 		return clientCred
 
 # Create your views here.
@@ -43,11 +41,12 @@ def dashboard(request):
 
 	# Calendar Requests #
 	calendarCredJson = get_cred('calendar_cred')
-	calendarCred = OAuth2Credentials().from_json(calendarCredJson)
+	calendarCred = OAuth2Credentials.from_json(calendarCredJson)
 
 	http = httplib2.Http()
 	http = calendarCred.authorize(http)
 	service = build('calendar', 'v3', http = http)
-	events = service.events().list(pageToken = None).execute()
+	events = service.events().list(calendarId = 'jrojas2016@gmail.com', pageToken = None).execute()
 	print events 	# DEBUG
-	return render(request, "dashboard.html", playlists = playlists['items'], events = events['items'])
+	context = {'playlists': playlists['items'], 'events':events['items']}
+	return render(request, "dashboard.html", context)

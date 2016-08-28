@@ -4,11 +4,11 @@
     <p>DASHBOARD</p>
 
 	<div class="" width="100" height="180" overflow: scroll>
-		<ul>
+			<iframe src="https://embed.spotify.com/?uri={{ playlists.0.uri }}" width="300" height="380" frameborder="0" allowtransparency="true"></iframe>
+			<ul>
 				{% for playlist in playlists %}
 				<li id = "{{ forloop.counter }}">
 					<p> {{ playlist.name }} </p>
-					<p> {{ playlist.owner }} </p>
 					<img src="{{ playlist.images.0.url }} " height="100" width="100"> </img>
 
 					
@@ -48,14 +48,6 @@
 
 
 	</div>
-
-
-
-
-
-
-
-<script src="{% static "js/dashboard.js" %}"></script>
 
 
 {% endblock %}
