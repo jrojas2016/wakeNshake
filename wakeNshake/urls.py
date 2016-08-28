@@ -16,11 +16,17 @@ Including another URLconf
 from django.conf.urls import url, include
 from django.contrib import admin
 from MusicAlarm import views as MusicAlarmViews
-
+from oauth import views as OauthViews
 
 urlpatterns = [
+    # Admin URL
     url(r'^admin/', admin.site.urls),
-    url(r'^o/', include('oauth2_provider.urls', namespace='oauth2_provider')),
+
+    # OAuth URLs
+    url('^', include('django.contrib.auth.urls')),
+    url(r'^login', OauthViews.login, name = 'login'),
+
+    # MusicAlarm URLs
     url(r'^', MusicAlarmViews.homeview, name = 'homeview')
 
 ]
