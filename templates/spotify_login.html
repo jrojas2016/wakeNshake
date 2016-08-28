@@ -1,8 +1,9 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <p>Spotify</p>
-    <a href="{% url 'oauth2callback_spotify' %}" class="btn btn-default">Spotify login</a>
-    <a href="{% url 'dashboard' %}" class="btn btn-default">Next</a>
-
+    <div class = "genbox">
+    	<h4>Spotify</h4>
+    	<a href="{% url 'oauth2callback_spotify' %}" class="btn btn-default">Spotify login</a>
+    	<a href="{% url 'dashboard' %}" class="btn btn-default">Next</a>
+    </div>
 {% endblock %}
