@@ -60,3 +60,16 @@ def oauth2callback_spotify(request):
 		# update user entry in db
 
 	return redirect('login/client_id=spotify/')
+
+def adduser(request):
+        form = UserForm(request.POST)
+        if form.is_valid():
+            new_user = User.objects.create_user(**form.cleaned_data)
+            login(new_user)
+            # redirect, or however you want to get to the main view
+            return redirect("/login/calendar")
+    else:
+        form = UserForm() 
+
+    return render(request, 'adduser.html', {'form': form}) 
+
