@@ -1,0 +1,6 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <p>Google calendar</p>
+    <a href="{% url 'oauth2callback_calendar' %}" class="btn btn-default">Google calendar login</a>
+{% endblock %}

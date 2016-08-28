@@ -1,0 +1,6 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <p>Spotify</p>
+    <a href="{% url 'oauth2callback_spotify' %}" class="btn btn-default">Spotify login</a>
+{% endblock %}
