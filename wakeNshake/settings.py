@@ -27,10 +27,10 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
-# SPOTIFY_SECRETS = os.path.join(BASE_DIR, "/ClientSecrets/spotify_secrets.json")
-# CALENDAR_SECRETS = os.path.join(BASE_DIR, "/ClientSecrets/calendar_secrets.json")
-SPOTIFY_SECRETS = "spotify_secrets.json"
-CALENDAR_SECRETS = "calendar_secrets.json"
+SPOTIFY_SECRETS = os.path.join(BASE_DIR, "/ClientSecrets/spotify_secrets.json")
+CALENDAR_SECRETS = os.path.join(BASE_DIR, "/ClientSecrets/calendar_secrets.json")
+# SPOTIFY_SECRETS = "spotify_secrets.json"
+# CALENDAR_SECRETS = "calendar_secrets.json"
 
 # Application definition
 

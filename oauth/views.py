@@ -1,5 +1,6 @@
 from wakeNshake.settings import SPOTIFY_SECRETS, CALENDAR_SECRETS
 from django.shortcuts import render, HttpResponse
+from django.http import HttpResponseRedirect
 from django.views.decorators.csrf import csrf_protect
 import oauth2client.client as oauthClient
 import hashlib
@@ -76,27 +77,45 @@ def oauth2callback_spotify(request, user):
 
 def adduser(request):
 	print 'rendered'
-	form = UserForm(request.POST)
-	if form.is_valid():
-		new_user = User.objects.create_user(**form.cleaned_data)
-		new_user.save()
-		# redirect, or however you want to get to the main view
-		user = new_user
-		user.save()
-		print "User is valid"
-		client = {}
-		print user.password
-		auth_user = authenticate(username= user.username, password = user.password)
-		print auth_user
-		if auth_user is not None:
-			login(request, user)
-			return render(request, 'calendar_login.html', {'user': user} )
+
+	if request.method == "POST":
+		form = UserForm(request.POST)
+		print "ALOOOOOOOOOOO"
+		if form.is_valid():
+			new_user = User.objects.create_user(**form.cleaned_data)
+			print "HELLOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO"
+			login(new_user)
+			# redirect, or however you want to get to the main view
+			return HttpResponseRedirect('user_login.html')
 		else:
-			pass
+			print "Form is not valid"
 	else:
 		form = UserForm() 
-		print "User is not valid"
+
+	return render(request, 'adduser.html', {'form': form})
 
 
-	return render(request, 'adduser.html', {'form': form}) 
+	# form = UserForm(request.POST)
+	# if form.is_valid():
+	# 	new_user = User.objects.create_user(**form.cleaned_data)
+	# 	new_user.save()
+	# 	# redirect, or however you want to get to the main view
+	# 	user = new_user
+	# 	user.save()
+	# 	print "User is valid"
+	# 	client = {}
+	# 	print user.password
+	# 	auth_user = authenticate(username= user.username, password = user.password)
+	# 	print auth_user
+	# 	if auth_user is not None:
+	# 		login(request, user)
+	# 		return render(request, 'calendar_login.html', {'user': user} )
+	# 	else:
+	# 		pass
+	# else:
+	# 	form = UserForm() 
+	# 	print "User is not valid"
+
+
+	# return render(request, 'adduser.html', {'form': form}) 
 
