@@ -5,7 +5,7 @@ from spotipy import client
 import httplib2
 import json
 import os
-
+import datetime
 # Util functions
 def get_cred(clientName):
 	if clientName == 'spotify_cred':
@@ -48,5 +48,7 @@ def dashboard(request):
 	service = build('calendar', 'v3', http = http)
 	events = service.events().list(calendarId = 'jrojas2016@gmail.com', pageToken = None).execute()
 	# print events 	# DEBUG
-	context = {'playlists': playlists['items'], 'events':events['items']}
+	currenttime = datetime.datetime.now()
+	print currenttime
+	context = {'playlists': playlists['items'], 'events':events['items'], 'now':currenttime}
 	return render(request, "dashboard.html", context)

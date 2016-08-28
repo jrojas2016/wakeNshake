@@ -1,22 +1,28 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <h1 style="color: white">DASHBOARD</h1>
+	
+
+    <h1 style="display: inline-block; padding-left: 12%; color: white">PLAYER</h1>
+    <h1 style="display: inline-block; padding-left: 16%; color: white">PLAYLISTS</h1>
+    <h1 style="display: inline-block; padding-left: 16%; color: white">EVENTS</h1>
 	
       <div class="container" style="padding: 0">
 
-        <div class="col-md-4">
-        <iframe src="https://embed.spotify.com/?uri={{ playlists.0.uri }}" width="300" height="380" frameborder="0" allowtransparency="true"></iframe>
+        <div id="spotify-play" class="col-md-4">
+        <iframe id="spotify" src="https://embed.spotify.com/?uri={{ playlists.0.uri }}" width="300" height="380" frameborder="0" allowtransparency="true"></iframe>
         </div>
 
         <div style="margin-right: 70px; align: center; width: 300px; height: 380px; display: inline-block; background-color: #181818; padding: 0; overflow-y: scroll" >
 			<ul style="height: 380px; padding: 0;">
 			{% for playlist in playlists %}
-				<li style="padding: 5px; border-bottom: 1px solid #282828;" id = "{{ forloop.counter }}">
-					<img src="{{ playlist.images.0.url }} " height="78" width="78"> </img>	
-					<span style="color: white; padding-left: 5px;"> {{ playlist.name }} </span>
-				</li>
-				{% endfor %}
+				<a onclick="setPlayButtonPlaylist()">
+					<li id="{{ playlist.uri }}" style="padding: 5px; border-bottom: 1px solid #282828;" id = "{{ forloop.counter }}">
+						<img src="{{ playlist.images.0.url }} " height="78" width="78"> </img>	
+						<span style="color: white; padding-left: 5px;"> {{ playlist.name }} </span>
+					</li>
+				</a>
+			{% endfor %}
 			
 			</ul>
        </div>
@@ -26,8 +32,8 @@
 				{% for event in events %}
 				<li style="border-bottom: 1px solid #282828; padding: 5px;" id = "{{ forloop.counter }}">
 					<p style="color: white"> {{ event.summary }} </p>
-					<p style="color: #a0a0a0"> {{ event.start.dateTime }} </p>
-					<p style="color: #a0a0a0"> {{ event.end.dateTime }} </p>
+					<p style="color: #a0a0a0">Start: {{ event.start.dateTime }} </p>
+					<p style="color: #a0a0a0">End: {{ event.end.dateTime }} </p>
 				</li>
 				{% endfor %}
 			
@@ -54,7 +60,16 @@
         ctz=America%2FLos_Angeles" style=" border-width:0 " width="500" height="500" frameborder="0" scrolling="no">
             
         </iframe>
-	</div>
+
+
+	<script type="text/javascript">
+		
+		function setPlayButtonPlaylist(num){
+			document.getElementById('spotify').src = "https://embed.spotify.com/?uri={{ playlists.1.uri }}";
+		}
+
+
+	</script>
 
 
 {% endblock %}
