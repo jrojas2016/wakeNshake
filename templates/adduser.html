@@ -3,14 +3,15 @@
 
 {% block content %}
 
-	<form method="post" action="">{% csrf_token %}
-		<h4>UserName</h4>
-			{{ UserForm.username }}
-		<h4>Email</h4>
-			{{ UserForm.email}}
-		<h4>Password</h4>
-	    	{{ UserForm.password}}
-	    
+    <form method="POST" class="post-form">{% csrf_token %}
+    	<label for="username">UserName: </label>
+		<input id="username" type="text" name="username" value="{{ UserForm.username }}">
+    	<label for="email">Email: </label>
+		<input id="email" type="text" name="email" value="{{ UserForm.email }}">
+    	<label for="password">Password: </label>
+		<input id="password" type="password" name="password" value="{{ UserForm.password }}">
+
+	
 	    <input type="submit" class="btn btn-success" value="Submit" />
 	</form>
 

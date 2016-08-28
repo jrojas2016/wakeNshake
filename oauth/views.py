@@ -5,6 +5,8 @@ import oauth2client.client as oauthClient
 import hashlib
 import json
 from models import UserForm
+from django.contrib.auth.models import User
+from django.contrib.auth import authenticate
 
 # Util Functions
 def sha512_hash(credentials):
@@ -76,10 +78,11 @@ def adduser(request):
 	form = UserForm(request.POST)
 	if form.is_valid():
 		new_user = User.objects.create_user(**form.cleaned_data)
-		login(new_user)
+		new_user.save()
 		# redirect, or however you want to get to the main view
 		user = new_user
-		return render(request, 'calendar_login.html', user= user )
+		user.save()
+		return render(request, 'login.html' )
 	else:
 		form = UserForm() 
 
