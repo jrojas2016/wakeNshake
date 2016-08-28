@@ -27,6 +27,8 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+SPOTIFY_SECRETS = os.path.join(BASE_DIR, "/ClientSecrets/spotify_secrets.json")
+CALENDAR_SECRETS = os.path.join(BASE_DIR, "/ClientSecrets/calendar_secrets.json")
 
 # Application definition
 
@@ -51,8 +53,6 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    #'corsheaders.middleware.CorsMiddleware',
-
 ]
 
 ROOT_URLCONF = 'wakeNshake.urls'

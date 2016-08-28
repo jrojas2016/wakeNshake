@@ -1,4 +1,4 @@
-from settings import SPOTIFY_SECRET, CALENDAR_SECRET
+from wakeNshake.settings import SPOTIFY_SECRETS, CALENDAR_SECRETS
 from django.shortcuts import render, HttpResponse
 from django.views.decorators.csrf import csrf_protect
 import oauth2client.client as oauthClient
@@ -38,6 +38,7 @@ def oauth2callback_calendar(request):
 		#shaCred = sha512_hash(credentials.to_json())
 		# update user entry in db
 	return redirect('login/client_id=calendar/', current_user)
+
 @csrf_protect
 def oauth2callback_spotify(request, user):
 	current_user = request.user
@@ -70,15 +71,15 @@ def oauth2callback_spotify(request, user):
 
 
 def adduser(request):
-        form = UserForm(request.POST)
-        if form.is_valid():
-            new_user = User.objects.create_user(**form.cleaned_data)
-            login(new_user)
-            # redirect, or however you want to get to the main view
-            user = new_user
-            return redirect("/login/calendar", user= user )
-    else:
-        form = UserForm() 
+	form = UserForm(request.POST)
+	if form.is_valid():
+		new_user = User.objects.create_user(**form.cleaned_data)
+		login(new_user)
+		# redirect, or however you want to get to the main view
+		user = new_user
+		return redirect("/login/calendar", user= user )
+	else:
+		form = UserForm() 
 
-    return render(request, 'adduser.html', {'form': form}) 
+	return render(request, 'adduser.html', {'form': form}) 
 
