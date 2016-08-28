@@ -1,13 +1,12 @@
 {% extends "base.html" %}
 
 {% block content %}
-	<p>Wake N Bake!!!!</p>
-
-	<a href="{% url 'calendar_login' %}" class="btn btn-default">Get started!</a>
-
-
-	<p>Already have an account?	<a href="" class="btn btn-default">Log in here! </a> </p>
-
+	<div class = "genbox">
+		<h2 style="text-align:center;">Wake N Bake!!!!</h2>
+		<a style="margin: 0 auto; position: relative;top:50%; left:35%;" href="{% url 'calendar_login' %}" class="btn btn-default">Get started!</a>
+		<br><br><br>
+		<h6 style="text-align:center;">Already have an account?	<a href="" class="btn btn-default">Log in here! </a> </h6>
+	</div>
 {% endblock %}
 
 
