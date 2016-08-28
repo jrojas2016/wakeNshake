@@ -38,7 +38,9 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'corsheaders',
-    'oauth2_provider'
+    'oauth2_provider',
+    'MusicAlarm',
+    'oauth'
 
 
 ]
