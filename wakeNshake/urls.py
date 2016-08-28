@@ -24,9 +24,9 @@ urlpatterns = [
 
     # OAuth URLs
     url('^', include('django.contrib.auth.urls')),
-    url(r'^login', OauthViews.login, name = 'login'),
-
+    
     # MusicAlarm URLs
     url(r'^', MusicAlarmViews.homeview, name = 'homeview')
+
 
 ]
