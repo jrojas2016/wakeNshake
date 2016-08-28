@@ -24,9 +24,12 @@ urlpatterns = [
 
     # OAuth URLs
     url('^', include('django.contrib.auth.urls')),
-    
-    # MusicAlarm URLs
-    url(r'^', MusicAlarmViews.homeview, name = 'homeview')
 
+    url(r'^oauth2callback/calendar', OauthViews.oauth2callback_calendar, name = 'oauth2callback_calendar'),
+    url(r'^oauth2callback/spotify', OauthViews.oauth2callback_spotify, name = 'oauth2callback_spotify'),
+
+    # MusicAlarm URLs
+    url(r'^', MusicAlarmViews.homeview, name = 'homeview'),
+    url(r'^login/client_id=(?P<client_id>[A-Z,a-z]+)/$',MusicAlarmViews.login , name='login')
 
 ]
