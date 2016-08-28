@@ -1,5 +1,7 @@
 // modules
-@import "scss/modules/imports";
-@import "scss/modules/colors";
+@import "scss/Modules/imports";
+@import "scss/Modules/colors";
 
 //partials
+@import "scss/Partials/body";
+@import "scss/Partials/login";

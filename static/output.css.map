@@ -1,0 +1,7 @@
+{
+"version": 3,
+"mappings": "AAAA,IAAK;EACH,MAAM,EAAE,IAAI;EACZ,KAAK,EAAE,IAAI;EACX,UAAU,EAAE,uCAAuC;EACnD,aAAa,EAAE,IAAI;EACnB,eAAe,EAAE,KAAK;EACtB,QAAQ,EAAC,IAAI;;AAGf,IAAK;EACH,QAAQ,EAAE,QAAQ;EAClB,UAAU,EAAE,IAAI;;ACXlB,OAAQ;EACN,OAAO,EAAE,KAAK;EACd,UAAU,ECFD,IAAI;EDGb,KAAK,EAAE,KAAK;EACZ,MAAM,EAAE,KAAK;EACb,MAAM,EAAE,iBAAiB;EACzB,OAAO,EAAE,IAAI;EACb,aAAa,EAAE,GAAG",
+"sources": ["scss/Partials/body.scss","scss/Partials/login.scss","scss/Modules/colors.scss"],
+"names": [],
+"file": "output.css"
+}

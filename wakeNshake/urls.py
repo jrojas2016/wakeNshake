@@ -19,6 +19,9 @@ from django.contrib import admin
 from MusicAlarm import views as MusicAlarmViews
 from oauth import views as OauthViews
 from django.contrib.auth import views as auth_views
+from django.conf import settings
+from django.conf.urls.static import static
+
 
 urlpatterns = [
     # Admin URL
@@ -43,4 +46,5 @@ urlpatterns = [
     # url(r'^user_login', auth_views.login, {'template_name': 'user_login.html'}, name='user_login'),
     # url(r'^adduser', OauthViews.adduser, name='adduser')
 
-]
+]+ static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+
