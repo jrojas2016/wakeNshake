@@ -13,3 +13,5 @@ def calendar_login(request):
 	# client = {"client_id": 'calendar'}
 	return render(request, "calendar_login.html")
 
+def dashboard(request):
+	return render(request, "dashboard.html")
