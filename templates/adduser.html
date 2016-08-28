@@ -1,5 +1,17 @@
-<form method="post" action="">
-    {% csrf_token %}
-    {{ form }}
-    <input type="submit" value="Create new user account" />
-</form>
+{% extends "base.html" %}
+
+
+{% block content %}
+
+	<form method="post" action="">{% csrf_token %}
+		<h4>UserName</h4>
+			{{ UserForm.username }}
+		<h4>Email</h4>
+			{{ UserForm.email}}
+		<h4>Password</h4>
+	    	{{ UserForm.password}}
+	    
+	    <input type="submit" class="btn btn-success" value="Submit" />
+	</form>
+
+{% endblock %}

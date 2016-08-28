@@ -3,9 +3,13 @@
 {% block content %}
 	<p>Wake N Bake!!!!</p>
 
-	<a href="{% url 'login/clien_id={{ client['clien_id'] }}' %}" class="btn btn-default">Get started!</a>
+	<a href="{% url 'adduser' %}" class="btn btn-default">Get started!</a>
+
 
 	<p>Already have an account?	<a href="{% url 'user_login' %}" class="btn btn-default">Log in here! </a> </p>
 
 {% endblock %}
+
+
+
 

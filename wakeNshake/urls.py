@@ -25,18 +25,20 @@ urlpatterns = [
     url(r'^admin/', admin.site.urls),
 
     # OAuth URLs
-    url(r'^', include('django.contrib.auth.urls')),
+    #url(r'^', include('django.contrib.auth.urls')),
     url(r'^oauth2callback/calendar', OauthViews.oauth2callback_calendar, name = 'oauth2callback_calendar'),
     url(r'^oauth2callback/spotify', OauthViews.oauth2callback_spotify, name = 'oauth2callback_spotify'),
 
     # MusicAlarm URLs
-    url(r'^', MusicAlarmViews.homeview, name = 'homeview'),
+    url(r'^$', MusicAlarmViews.homeview, name = 'homeview'),
 
     # Login URLs
-    url(r'^login/client_id=(?P<client_id>[A-Z,a-z]+)/$', MusicAlarmViews.login , name='login'),
+    url(r'^login/spotify', MusicAlarmViews.spotify_login, name='spotify_login'),
+    url(r'^login/calendar', MusicAlarmViews.calendar_login, name='calendar_login'),
+
     
     #built in login_tool
     url(r'^user_login', auth_views.login, {'template_name': 'user_login.html'}, name='user_login'),
-    url(r'^add_user', OauthViews.adduser, name='adduser')
+    url(r'^adduser', OauthViews.adduser, name='adduser')
 
 ]

@@ -5,8 +5,11 @@ from django.shortcuts import render, HttpResponse
 def homeview(request):
 	return render(request, "home.html")
 
-def login(request, client_id):
-	client = {"client_id": client_id}
-	return redirect(request, "login.html", client = client)
+def spotify_login(request):
+	client = {"client_id": 'spotify'}
+	return render(request, "login.html", client = client)
 
+def calendar_login(request):
+	client = {"client_id": 'calendar'}
+	return render(request, "login.html", client = client)
 

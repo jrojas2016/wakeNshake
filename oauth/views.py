@@ -4,6 +4,7 @@ from django.views.decorators.csrf import csrf_protect
 import oauth2client.client as oauthClient
 import hashlib
 import json
+from models import UserForm
 
 # Util Functions
 def sha512_hash(credentials):
@@ -37,7 +38,7 @@ def oauth2callback_calendar(request):
 		customUser.save()
 		#shaCred = sha512_hash(credentials.to_json())
 		# update user entry in db
-	return redirect('login/client_id=calendar/', current_user)
+	return redirect('login/calendar/', current_user)
 
 @csrf_protect
 def oauth2callback_spotify(request, user):
@@ -66,18 +67,19 @@ def oauth2callback_spotify(request, user):
 		cust.spotify_cred = credentials
 		cust.save()
 		# update user entry in db
-	return redirect('login/client_id=spotify/')
+	return redirect('login/spotify/')
 
 
 
 def adduser(request):
+	print 'rendered'
 	form = UserForm(request.POST)
 	if form.is_valid():
 		new_user = User.objects.create_user(**form.cleaned_data)
 		login(new_user)
 		# redirect, or however you want to get to the main view
 		user = new_user
-		return redirect("/login/calendar", user= user )
+		return render(request, 'calendar_login.html', user= user )
 	else:
 		form = UserForm() 
 
