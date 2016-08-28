@@ -2,15 +2,26 @@
 
 {% block content %}
     <p>DASHBOARD</p>
-    
-	<ul>
-		<li>Shakira</li>
-		<iframe src="https://embed.spotify.com/?uri=spotify:user:1248308979:playlist:0bVFwy3FhwMtfsUsfnlWI1" width="300" height="380" frameborder="0" allowtransparency="true"></iframe>
 
-		<li>Coldplaysito</li>
-		<iframe src="https://embed.spotify.com/?uri=spotify:user:1210510039:playlist:5c2UWQA8X1Ke2ubW6hHRal" width="300" height="380" frameborder="0" allowtransparency="true"></iframe>
+	<body class="">
 
-		<li>Mood Booster</li>
-		<iframe src="https://embed.spotify.com/?uri=spotify:user:spotify:playlist:6uTuhSs7qiEPfCI3QDHXsL" width="300" height="380" frameborder="0" allowtransparency="true"></iframe>
+		<div class="" width="100" height="180" overflow: scroll>
+			<ul>
+				{% for playlist in playlists %}
+				<li id = "{{ forloop.counter }}">
+					<p> {{ playlist.name }} </p>
+					<p> {{ playlist.owner }} </p>
+					<img src="{{ playlist.images.0.url }} " height="100" width="100"> </img>
+
+					
+				</li>
+				{% endfor %}
+			
+			</ul>
+
+
+
+	    </body>
+
 
 {% endblock %}
