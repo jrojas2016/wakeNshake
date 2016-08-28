@@ -47,6 +47,6 @@ def dashboard(request):
 	http = calendarCred.authorize(http)
 	service = build('calendar', 'v3', http = http)
 	events = service.events().list(calendarId = 'jrojas2016@gmail.com', pageToken = None).execute()
-	print events 	# DEBUG
+	# print events 	# DEBUG
 	context = {'playlists': playlists['items'], 'events':events['items']}
 	return render(request, "dashboard.html", context)
