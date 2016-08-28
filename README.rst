@@ -2,11 +2,10 @@ Wake N Shake
 
 The smart alarm clock with awesome tunes!
 
-
 ## Table of Contents
 
-*Project Version
-
+* Project Version
+* Documentation
 
 ## Project Version
 Version 1.0 /hacks 2016
@@ -37,4 +36,4 @@ To run development server and migrate models to sqlite3 db
 	$ python manage.py runserver
 
 
-
+#### Adding 12
