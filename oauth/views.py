@@ -2,6 +2,7 @@ from wakeNshake.settings import SPOTIFY_SECRETS, CALENDAR_SECRETS
 from django.shortcuts import render, HttpResponse, redirect
 from django.views.decorators.csrf import csrf_protect
 import oauth2client.client as oauthClient
+from spotipy import oauth2
 import hashlib
 import json
 import os
@@ -9,14 +10,6 @@ from models import UserForm
 from django.contrib.auth.models import User
 from models import customUser
 from django.contrib.auth import authenticate
-
-class session:
-	spotify_code = None
-	calendar_code = None
-	def __init__(self):
-		pass
-
-sesh = session()
 
 # Util Functions
 def sha512_hash(credentials):
@@ -48,7 +41,6 @@ def oauth2callback_calendar(request):
 		# customUser.objects.create(user= current_user )
 		authCode = request.GET.get('code', '')
 		print authCode
-		session.calendar_code = authCode
 		credentials = flow.step2_exchange(authCode)
 		savedCred = json.load( open(os.getcwd() + '/oauth/ClientSecrets/clientCred.json') )
 		savedCred['calendar_cred'] = credentials.to_json()
@@ -60,31 +52,30 @@ def oauth2callback_calendar(request):
 	return redirect('calendar_login')
 
 @csrf_protect
-def oauth2callback_spotify(request, user):
+def oauth2callback_spotify(request):
 	# current_user = request.user
-	spotifySecrets = json.loads( open(SPOTIFY_SECRETS) )
+	spotifySecrets = json.load( open(SPOTIFY_SECRETS) )
 	try:
-		flow = oauthClient.OAuth2WebServerFlow(
-			client_id = spotifySecrets['web']['client_id'],
-			client_secret = spotifySecrets['web']['client_secret'],
-			scope = spotifySecrets['web']['scope'],
-			redirect_uri = spotifySecrets['web']['redirect_uris']
+		flow = oauth2.SpotifyOAuth(
+			client_id = spotifySecrets['web']['client_id'], 
+			client_secret = spotifySecrets['web']['client_secret'], 
+			redirect_uri = spotifySecrets['web']['redirect_uris'][0], 
+			scope = spotifySecrets['web']['scope']
 		)
-		# flow.params['show_dialog'] = False	# might not need
 	except:
 		msg = 'There is an error with your spotify API tokens! Please review the credentials.'
 		print msg	#DEBUG
 
-	if 'spotify_code' not in session:
-		authUri = flow.step1_get_authorize_url()
+	if request.GET.get('code', '') is '':
+		authUri = flow.get_authorize_url()
 		return redirect(authUri)
 	else:
 		# cust = customUser.objects.get(user= current_user)
 		authCode = request.GET.get('code', '')
-		session['spotify_code'] = authCode
-		credentials = flow.step2_exchange(authCode)
+		credentials = flow.get_access_token(authCode)
+		print credentials
 		savedCred = json.load( open(os.getcwd() + '/oauth/ClientSecrets/clientCred.json') )
-		savedCred['spotify_cred'] = credentials.to_json()
+		savedCred['spotify_cred'] = json.dumps(credentials)
 		json.dump(savedCred, open(os.getcwd() + '/oauth/ClientSecrets/clientCred.json', 'w') )
 		#shaCred = sha512_hash(credentials.to_json())
 		# cust.spotify_cred = credentials
