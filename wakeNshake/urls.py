@@ -38,7 +38,7 @@ urlpatterns = [
 
     
     #built in login_tool
-    url(r'^user_login', auth_views.login, {'template_name': 'user_login.html'}, name='user_login'),
-    url(r'^adduser', OauthViews.adduser, name='adduser')
+    # url(r'^user_login', auth_views.login, {'template_name': 'user_login.html'}, name='user_login'),
+    # url(r'^adduser', OauthViews.adduser, name='adduser')
 
 ]
