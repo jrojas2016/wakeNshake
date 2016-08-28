@@ -1,7 +1,7 @@
 # Things to ignore  #
 
 /venv
-
+/test
 *.pyc
 
 
