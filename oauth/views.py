@@ -1,20 +1,44 @@
 from wakeNshake.settings import SPOTIFY_SECRETS, CALENDAR_SECRETS
 from django.shortcuts import render, HttpResponse, redirect
 from django.views.decorators.csrf import csrf_protect
+from django.contrib.auth import authenticate
+from django.contrib.auth.models import User
 import oauth2client.client as oauthClient
+from models import customUser
+from models import UserForm
 from spotipy import oauth2
-import hashlib
+from Crypto.Cipher import AES
+from Crypto import Random
 import json
 import os
-from models import UserForm
-from django.contrib.auth.models import User
-from models import customUser
-from django.contrib.auth import authenticate
 
 # Util Functions
-def sha512_hash(credentials):
-	shaCred = hashlib.sha512(credentials).hexdigest()
-	return shaCred
+class CryptoEngine:	# Don't know where is best to include this
+
+	def __init__(self, key=b'Sixteen byte key'):
+		self.key = key	# TODO: key generation/storage
+		self.iv = Random.new().read(AES.block_size)
+		self.cipher = AES.new(self.key, AES.MODE_CFB, self.iv)
+
+	def decrypt_cred(self, encryptedCred):
+		return self.cipher.decrypt(encryptedCred.decode("hex"))[len(self.iv):]
+			
+	def encrypt_cred(self, unencryptedCred):
+		self.msg = self.iv + self.cipher.encrypt(unencryptedCred)
+		return self.msg.encode("hex")
+
+def save_cred_to_db(client, credentials):
+	ce = CryptoEngine()
+	encryptedCreds = ce.encrypt_cred(credentials)
+	if client == 'spotify_cred':
+		print "Saved encrypted Spotify cred: {0}".format(encryptedCreds) 	# DEBUG
+	elif client == 'calendar_cred':
+		print "Saved encrypted Calendar cred: {0}".format(encryptedCreds) 	# DEBUG
+	else:
+		print "No {0} client available".format(client)
+		return None
+
+	return encryptedCreds	# Solution for now, while DB is up and running
 
 # Create your views here.
 @csrf_protect
@@ -42,13 +66,12 @@ def oauth2callback_calendar(request):
 		authCode = request.GET.get('code', '')
 		# print authCode 	# DEBUG
 		credentials = flow.step2_exchange(authCode)
-
+		encryptedCreds = save_cred_to_db('calendar_cred', credentials.to_json())
 		savedCred = json.load( open(os.getcwd() + '/oauth/ClientSecrets/clientCred.json') )
-		savedCred['calendar_cred'] = credentials.to_json()
+		savedCred['calendar_cred'] = encryptedCreds
 		json.dump(savedCred, open(os.getcwd() + '/oauth/ClientSecrets/clientCred.json', 'w') )
 		# customUser.object.create(user= current_user, calendar_cred = credentials)
 		# customUser.save()
-		#shaCred = sha512_hash(credentials.to_json())
 		# update user entry in db
 	return redirect('calendar_login')
 
@@ -74,8 +97,9 @@ def oauth2callback_spotify(request):
 		# cust = customUser.objects.get(user= current_user)
 		authCode = request.GET.get('code', '')
 		credentials = flow.get_access_token(authCode)
+		encryptedCreds = save_cred_to_db('spotify_cred', json.dumps(credentials))
 		savedCred = json.load( open(os.getcwd() + '/oauth/ClientSecrets/clientCred.json') )
-		savedCred['spotify_cred'] = json.dumps(credentials)
+		savedCred['spotify_cred'] = encryptedCreds
 		json.dump(savedCred, open(os.getcwd() + '/oauth/ClientSecrets/clientCred.json', 'w') )
 		#shaCred = sha512_hash(credentials.to_json())
 		# cust.spotify_cred = credentials

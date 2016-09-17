@@ -2,20 +2,39 @@ from django.shortcuts import render, HttpResponse
 from oauth2client.client import OAuth2Credentials
 from apiclient.discovery import build
 from spotipy import client
+
+from Crypto.Cipher import AES
+from Crypto import Random
 import httplib2
+import datetime
 import json
 import os
-import datetime
-# Util functions
+
+# Util
+class CryptoEngine:	# Don't know where is best to include this
+
+	def __init__(self, key=b'Sixteen byte key'):
+		self.key = key	# TODO: key generation/storage
+		self.iv = Random.new().read(AES.block_size)
+		self.cipher = AES.new(self.key, AES.MODE_CFB, self.iv)
+
+	def decrypt_cred(self, encryptedCred):
+		return self.cipher.decrypt(encryptedCred.decode("hex"))[len(self.iv):]
+
+	def encrypt_cred(self, unencryptedCred):
+		self.msg = self.iv + self.cipher.encrypt(unencryptedCred)
+		return self.msg.encode("hex")
+
 def get_cred(clientName):
+	ce = CryptoEngine()
 	if clientName == 'spotify_cred':
 		clientCreds = json.load( open(os.getcwd() + '/oauth/ClientSecrets/clientCred.json', 'r') )
-		clientCred = json.loads( clientCreds[clientName] )
+		clientCred = json.loads( ce.decrypt_cred(clientCreds[clientName]) )
 		print type(clientCred) 	# DEBUG
 		return clientCred['access_token']
 	else:
 		clientCreds = json.load( open(os.getcwd() + '/oauth/ClientSecrets/clientCred.json', 'r') )
-		clientCred = str( clientCreds[clientName] )
+		clientCred = str( ce.decrypt_cred(clientCreds[clientName]) )
 		print type(clientCred) 	# DEBUG
 		return clientCred
 
