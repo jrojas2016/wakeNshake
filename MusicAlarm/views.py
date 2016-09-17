@@ -32,11 +32,15 @@ def calendar_login(request):
 	return render(request, "calendar_login.html")
 
 def dashboard(request):
+
+	# Query Params
+	now = datetime.datetime.utcnow().isoformat() + '-07:00'	#California tz offset
+
 	# Spotify Requests #
 	spotifyCred = get_cred('spotify_cred')
 	# print spotifyCred 	# DEBUG
 	spotifyClient = client.Spotify( auth = spotifyCred )
-	playlists = spotifyClient.user_playlists( user = '122632253')	# spotify:user:122632253
+	playlists = spotifyClient.user_playlists( user = '1248308979')	# spotify:user:122632253
 	# print playlists 	# DEBUG
 
 	# Calendar Requests #
@@ -46,7 +50,13 @@ def dashboard(request):
 	http = httplib2.Http()
 	http = calendarCred.authorize(http)
 	service = build('calendar', 'v3', http = http)
-	events = service.events().list(calendarId = 'jrojas2016@gmail.com', pageToken = None).execute()
+	events = service.events().list(
+		calendarId = 'jrojas2016@gmail.com', 
+		orderBy = "startTime",
+		singleEvents = True, 
+		maxResults = 10,
+		timeMin = now
+	).execute()
 	# print events 	# DEBUG
 	currenttime = datetime.datetime.now()
 	print currenttime
