@@ -1,6 +1,7 @@
 from django.shortcuts import render, HttpResponse
 from oauth2client.client import OAuth2Credentials
 from apiclient.discovery import build
+from oauth.models import customUser
 from spotipy import client
 
 from Crypto.Cipher import AES
@@ -10,7 +11,7 @@ import datetime
 import json
 import os
 
-# Util
+# Utils
 class CryptoEngine:	# Don't know where is best to include this
 
 	def __init__(self, key=b'Sixteen byte key'):
@@ -25,17 +26,16 @@ class CryptoEngine:	# Don't know where is best to include this
 		self.msg = self.iv + self.cipher.encrypt(unencryptedCred)
 		return self.msg.encode("hex")
 
-def get_cred(clientName):
+def get_cred(userName, clientName):
 	ce = CryptoEngine()
+	curr_user = customUser.objects.get(user_name = userName)
 	if clientName == 'spotify_cred':
-		clientCreds = json.load( open(os.getcwd() + '/oauth/ClientSecrets/clientCred.json', 'r') )
-		clientCred = json.loads( ce.decrypt_cred(clientCreds[clientName]) )
-		print type(clientCred) 	# DEBUG
+		clientCred = json.loads( ce.decrypt_cred(curr_user.spotify_cred) )
+		# print type(clientCred) 	# DEBUG
 		return clientCred['access_token']
-	else:
-		clientCreds = json.load( open(os.getcwd() + '/oauth/ClientSecrets/clientCred.json', 'r') )
-		clientCred = str( ce.decrypt_cred(clientCreds[clientName]) )
-		print type(clientCred) 	# DEBUG
+	elif clientName == 'calendar_cred':
+		clientCred = str( ce.decrypt_cred(curr_user.calendar_cred) )
+		# print type(clientCred) 	# DEBUG
 		return clientCred
 
 # Create your views here.
@@ -56,14 +56,14 @@ def dashboard(request):
 	now = datetime.datetime.utcnow().isoformat() + '-07:00'	#California tz offset
 
 	# Spotify Requests #
-	spotifyCred = get_cred('spotify_cred')
+	spotifyCred = get_cred('Jorge Rojas', 'spotify_cred')
 	# print spotifyCred 	# DEBUG
 	spotifyClient = client.Spotify( auth = spotifyCred )
 	playlists = spotifyClient.user_playlists( user = '1248308979')	# spotify:user:122632253
 	# print playlists 	# DEBUG
 
 	# Calendar Requests #
-	calendarCredJson = get_cred('calendar_cred')
+	calendarCredJson = get_cred('Jorge Rojas', 'calendar_cred')
 	calendarCred = OAuth2Credentials.from_json(calendarCredJson)
 
 	http = httplib2.Http()

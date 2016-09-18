@@ -27,13 +27,21 @@ class CryptoEngine:	# Don't know where is best to include this
 		self.msg = self.iv + self.cipher.encrypt(unencryptedCred)
 		return self.msg.encode("hex")
 
-def save_cred_to_db(client, credentials):
+def save_cred_to_db(userName, client, credentials):
 	ce = CryptoEngine()
 	encryptedCreds = ce.encrypt_cred(credentials)
+
 	if client == 'spotify_cred':
 		print "Saved encrypted Spotify cred: {0}".format(encryptedCreds) 	# DEBUG
+		cust = customUser.objects.get(user_name = userName)
+		cust.spotify_cred = encryptedCreds
+		cust.save()
+
 	elif client == 'calendar_cred':
 		print "Saved encrypted Calendar cred: {0}".format(encryptedCreds) 	# DEBUG
+		cust = customUser.objects.create(user_name = userName, calendar_cred = encryptedCreds)
+		cust.save()
+
 	else:
 		print "No {0} client available".format(client)
 		return None
@@ -43,7 +51,6 @@ def save_cred_to_db(client, credentials):
 # Create your views here.
 @csrf_protect
 def oauth2callback_calendar(request):
-	# current_user = request.user
 	calendarSecrets = json.load( open(CALENDAR_SECRETS) )
 
 	try:
@@ -62,23 +69,18 @@ def oauth2callback_calendar(request):
 		authUri = flow.step1_get_authorize_url()
 		return redirect(authUri)
 	else:
-		# customUser.objects.create(user= current_user )
 		authCode = request.GET.get('code', '')
 		# print authCode 	# DEBUG
 		credentials = flow.step2_exchange(authCode)
-		encryptedCreds = save_cred_to_db('calendar_cred', credentials.to_json())
-		savedCred = json.load( open(os.getcwd() + '/oauth/ClientSecrets/clientCred.json') )
-		savedCred['calendar_cred'] = encryptedCreds
-		json.dump(savedCred, open(os.getcwd() + '/oauth/ClientSecrets/clientCred.json', 'w') )
-		# customUser.object.create(user= current_user, calendar_cred = credentials)
-		# customUser.save()
 		# update user entry in db
+		encryptedCreds = save_cred_to_db('Jorge Rojas', 'calendar_cred', credentials.to_json())
+	
 	return redirect('calendar_login')
 
 @csrf_protect
 def oauth2callback_spotify(request):
-	# current_user = request.user
 	spotifySecrets = json.load( open(SPOTIFY_SECRETS) )
+
 	try:
 		flow = oauth2.SpotifyOAuth(
 			client_id = spotifySecrets['web']['client_id'], 
@@ -93,18 +95,13 @@ def oauth2callback_spotify(request):
 	if request.GET.get('code', '') is '':
 		authUri = flow.get_authorize_url()
 		return redirect(authUri)
+
 	else:
-		# cust = customUser.objects.get(user= current_user)
 		authCode = request.GET.get('code', '')
 		credentials = flow.get_access_token(authCode)
-		encryptedCreds = save_cred_to_db('spotify_cred', json.dumps(credentials))
-		savedCred = json.load( open(os.getcwd() + '/oauth/ClientSecrets/clientCred.json') )
-		savedCred['spotify_cred'] = encryptedCreds
-		json.dump(savedCred, open(os.getcwd() + '/oauth/ClientSecrets/clientCred.json', 'w') )
-		#shaCred = sha512_hash(credentials.to_json())
-		# cust.spotify_cred = credentials
-		# cust.save()
 		# update user entry in db
+		encryptedCreds = save_cred_to_db('Jorge Rojas', 'spotify_cred', json.dumps(credentials))
+	
 	return redirect('spotify_login')
 
 

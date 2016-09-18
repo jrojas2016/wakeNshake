@@ -6,7 +6,10 @@ from django.forms import ModelForm
 
 # Create your models here.
 class customUser(models.Model):
-	user = models.OneToOneField(User,null=True, related_name='profile')
+	# Assuming only one user for now. Implement Front-end login before scaling
+	id = models.AutoField(primary_key=True)
+	# user = models.OneToOneField(User,null=True, related_name='profile')
+	user_name = models.CharField(max_length=50, default='', unique=True)
 	spotify_cred = models.CharField(max_length=1000,default= '', unique=True)
 	calendar_cred = models.CharField(max_length=1000, default= '', unique=True)
 
