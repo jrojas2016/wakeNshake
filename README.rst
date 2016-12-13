@@ -19,21 +19,27 @@ This section includes crucial information on how to set up the web application o
 #### Virtual Environment
 
 To install a virtual enviornment, use
-	$ pip install virtualenv 
+	
+	``` pip install virtualenv 
 
 In order to run it and install requirements, be in the proper directory and then run
-	$ source venv/bin/activate
-	$ pip install -r requirements.txt
+	
+	```source venv/bin/activate
+	
+	``` pip install -r requirements.txt
 
 To end session,
-	$ deactivate
+	``` deactivate
 
 #### Running Django
 
 To run development server and migrate models to sqlite3 db
-	$ python manage.py makemigrations
-	$ python manage.py migrate
-	$ python manage.py runserver
+	
+	``` python manage.py makemigrations
+	
+	``` python manage.py migrate
+	
+	``` python manage.py runserver
 
 
 #### Adding 12
